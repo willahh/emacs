@@ -11,7 +11,11 @@
 ;; Backward delete char C-h
 (global-set-key (kbd "C-h") 'backward-delete-char)
 (define-key prog-mode-map (kbd "C-h") 'backward-delete-char)
-(define-key ivy-minibuffer-map (kbd "C-h") 'delete-backward-char)
+(use-package ivy
+  :ensure t
+  :bind (:map ivy-minibuffer-map
+              ("C-h" . 'delete-backward-char)))
+;; (define-key ivy-minibuffer-map (kbd "C-h") 'delete-backward-char)
 (use-package paredit
   :ensure t
   :hook (prog-mode)
@@ -30,7 +34,10 @@
 
 ;; Save
 (global-set-key (kbd "M-s") 'save-buffer)
-(define-key paredit-mode-map (kbd "M-s") 'save-buffer)
+(use-package paredit
+  :ensure t
+  :bind ("M-s" . 'save-buffer))
+;; (define-key paredit-mode-map (kbd "M-s") 'save-buffer)
 
 ;; Kill
 (prelude-require-packages '(whole-line-or-region))
@@ -59,6 +66,9 @@
 (global-set-key (kbd "<end>") 'end-of-buffer)
 (global-set-key (kbd "<home>") 'beginning-of-buffer)
 
+;; Hippie expand
+(global-set-key (kbd "M-i") 'hippie-expand)
+
 ;; --------------- ALT key binding
 (global-set-key (kbd "≈") 'counsel-M-x) ; Alt + x
 (use-package helm-ag
@@ -71,7 +81,7 @@
 
 ;; ;; Multi cursor stuf
 (global-set-key (kbd "ı") 'mc/mark-next-lines) ; ALT+SHIFT+n
-;; (global-set-key (kbd "∏") 'mc/mark-previous-lines) ; ALT+SHIFT+p
+(global-set-key (kbd "∏") 'mc/mark-previous-lines) ; ALT+SHIFT+p
 
 
 
@@ -108,12 +118,14 @@
 (global-set-key (kbd "M-o") 'other-window)
 (define-key diff-mode-map (kbd "M-o") 'other-window)
 ;; (define-key ggtags-navigation-map (kbd "M-o") 'other-window) ; Need to override ggtags map
+(require 'ibuffer)
 (define-key ibuffer-mode-map (kbd "M-o") 'other-window)
 ;; (global-set-key [(meta shift o)] 'wlh/previous-window)
 
 
 ;; buffer
 (global-set-key (kbd "M-n") 'xah-new-empty-buffer)
+(require 'org)
 (define-key org-mode-map (kbd "M-n") 'xah-new-empty-buffer)
 ;; (define-key slime-repl-mode-map (kbd "M-n") 'xah-new-empty-buffer)
 (define-key diff-mode-map (kbd "M-n") 'xah-new-empty-buffer)
@@ -124,6 +136,7 @@
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 ;; ---------------- Dired
+(require 'dired)
 (define-key dired-mode-map (kbd "C-j") 'dired-find-file)
 ;; (define-key php-mode-map [(control x) (control j)] 'dired-jump)
 ;; (define-key web-mode-map [(control x) (control j)] 'dired-jump)
@@ -221,7 +234,7 @@
 
 ;; ;;
 ;; (global-set-key (kbd "C-x k") 'kill-this-buffer)
-;; (define-key paredit-mode-map (kbd "M-q") 'fill-paragraph)
+(define-key paredit-mode-map (kbd "M-q") 'fill-paragraph)
 ;; (global-set-key (kbd "C-;") "\C-e;") ; (CONTROL + ; -> Append ";" at the end of a line)
 ;; (global-set-key (kbd "C-c RET") 'wlh/join-line)
 ;; ;; (global-set-key (kbd "C-c C-g") 'goto-line)
@@ -424,15 +437,16 @@
 ;; (global-set-key (kbd "C-M-(") 'paredit-forward-barf-sexp)
 ;; (global-set-key (kbd "C-M-)") 'paredit-forward-slurp-sexp)
 
-;; ;; i-search
-;; (define-key isearch-mode-map (kbd "C-'") 'avy-isearch)
-;; (define-key org-mode-map (kbd "C-'") 'avy-isearch)
-;; (define-key isearch-mode-map (kbd "C-h") 'isearch-delete-char)
-;; (define-key isearch-mode-map (kbd "M-v") 'isearch-yank-pop)
-;; (define-key isearch-mode-map (kbd "C-v") 'isearch-yank-pop)
-;; (define-key isearch-mode-map (kbd "C-c C-s") 'swiper--from-isearch)
-;; (define-key isearch-mode-map (kbd "C-z") 'isearch-yank-word-or-char) ; Used for azerty keyboard (qwerty z is more accessible than w)
-;; (define-key isearch-mode-map (kbd "C-i") 'isearch-highlight-phrase)
+;; i-search
+(define-key isearch-mode-map (kbd "C-'") 'avy-isearch)
+(require 'org)
+(define-key org-mode-map (kbd "C-'") 'avy-isearch)
+(define-key isearch-mode-map (kbd "C-h") 'isearch-delete-char)
+(define-key isearch-mode-map (kbd "M-v") 'isearch-yank-pop)
+(define-key isearch-mode-map (kbd "C-v") 'isearch-yank-pop)
+(define-key isearch-mode-map (kbd "C-c C-s") 'swiper--from-isearch)
+(define-key isearch-mode-map (kbd "C-z") 'isearch-yank-word-or-char)
+(define-key isearch-mode-map (kbd "C-i") 'isearch-highlight-phrase)
 
 ;; ;; help
 ;; (define-key help-mode-map (kbd "n") 'next-line)
@@ -446,8 +460,8 @@
 ;; ;; Browse the kill ring
 ;; (global-set-key (kbd "C-M-y") 'helm-show-kill-ring)
 
-;; ;; Display and edit occurances of regexp in buffer
-;; (global-set-key (kbd "C-c o") 'occur)
+;; Display and edit occurances of regexp in buffer
+(global-set-key (kbd "C-c o") 'occur)
 
 ;; ;; imenu-list
 ;; (global-set-key (kbd "C-c <C-i>") 'imenu-list)
@@ -464,9 +478,9 @@
 
 ;; (add-hook 'eshell-mode-hook 'm-eshell-hook)
 
-;; ;; expand-region
-;; (global-set-key (kbd "C-à") 'er/expand-region) ; C-0 on azerty
-;; (global-set-key (kbd "C-M-l") 'mark-sexp)
+;; expand-region
+(global-set-key (kbd "C-à") 'er/expand-region) ; C-0 on azerty
+(global-set-key (kbd "C-M-l") 'mark-sexp)
 
 ;; ;; ---------------- Magit
 ;; (global-set-key (kbd "C-x g") 'magit-status)
@@ -482,11 +496,13 @@
 ;; ;; (global-set-key (kbd "<f2>") 'helm-mini)
 
 
-;; ;; Projectile
-;; (global-set-key (kbd "M-p") 'projectile-find-file)
+;; Projectile
+(require 'projectile)
+(global-set-key (kbd "M-p") 'projectile-find-file)
 ;; ;; (define-key ggtags-navigation-map (kbd "M-p") 'projectile-find-file)
 ;; (define-key highlight-symbol-nav-mode-map (kbd "M-p") 'projectile-find-file)
-;; (define-key ibuffer-mode-map (kbd "M-p") 'projectile-find-file)
+(require 'ibuffer)
+(define-key ibuffer-mode-map (kbd "M-p") 'projectile-find-file)
 
 ;; ;; Find file
 ;; (global-set-key [(meta control shift p)] 'find-file-in-current-directory)
@@ -538,14 +554,14 @@
 ;; (define-key org-mode-map (kbd "È") 'org-metaup)
 ;; (global-set-key (kbd "C-c c") 'org-capture)
 
-;; ;; ------ zoom
-;; (global-set-key (kbd "M--") 'text-scale-decrease)
-;; (global-set-key (kbd "M-+") 'text-scale-increase)
+;; ------ zoom
+(global-set-key (kbd "M--") 'text-scale-decrease)
+(global-set-key (kbd "M-+") 'text-scale-increase)
 
-;; ;; ;; Comment
-;; (global-set-key (kbd "M-/") 'comment-or-uncomment-region-or-line)
-;; (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
-;; (define-key paredit-mode-map (kbd "M-;") 'comment-or-uncomment-region-or-line)
+ ;; Comment
+(global-set-key (kbd "M-/") 'comment-or-uncomment-region-or-line)
+(global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
+(define-key paredit-mode-map (kbd "M-;") 'comment-or-uncomment-region-or-line)
 
 ;; ;; Better move paragraph / mark paragraph
 ;; (global-set-key (kbd "M-¨") 'lawlist-forward-paragraph)
@@ -575,20 +591,19 @@
 ;; (define-key js2-mode-map (kbd "<C-M-mouse-3>") 'xref-pop-marker-stack)
 ;; (define-key js-mode-map (kbd "<C-M-mouse-3>") 'xref-pop-marker-stack)
 
-;; ;; Mouse
-;; ;; (global-set-key (kbd "<mouse-3>") 'mouse-major-mode-menu)
+;; Mouse
+(global-set-key (kbd "<mouse-3>") 'mouse-major-mode-menu)
 
 ;; ;; vc
 ;; ;; (define-key vc-dir-mode-map (kbd "C-M-i") 'vc-dir-previous-directory)
 ;; ;; (define-key diff-mode-map (kbd "C-M-i") 'diff-hunk-prev)
 ;; (define-key diff-mode-map (kbd "l") 'recenter-top-bottom)
 
-;; ;; avy
-;; (global-set-key (kbd "C-\'") 'avy-goto-word-1)
-;; (global-set-key (kbd "s-l") 'avy-goto-char-in-line)
+;; avy
+(require 'avy)
+(global-set-key (kbd "C-\'") 'avy-goto-word-1)
+(global-set-key (kbd "s-l") 'avy-goto-char-in-line)
 
-;; ;; Hippie expand
-;; (global-set-key (kbd "M-i") 'hippie-expand)
 
 ;; ;; ;; https://github.com/jacktasia/dumb-jump
 ;; (global-set-key (kbd "<M-backspace>") 'paredit-backward-kill-word)
