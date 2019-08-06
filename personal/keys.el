@@ -11,19 +11,26 @@
 ;; Backward delete char C-h
 (global-set-key (kbd "C-h") 'backward-delete-char)
 (define-key prog-mode-map (kbd "C-h") 'backward-delete-char)
-
+(define-key ivy-minibuffer-map (kbd "C-h") 'delete-backward-char)
 (use-package paredit
   :ensure t
+  :hook (prog-mode)
   :bind (("C-h" . 'paredit-backward-delete)
          :map lisp-mode-map
          ("C-h" . 'paredit-backward-delete)
          :map emacs-lisp-mode-map
-         "C-h" . 'paredit-backward-delete))
+         ("C-h" . 'paredit-backward-delete)))
+
+(global-set-key (kbd "C-c h") 'help)
 
 (use-package undo-tree
   :ensure t
   :bind (("M-z" . 'undo-tree-undo)
          ("M-Z" . 'undo-tree-redo)))
+
+;; Save
+(global-set-key (kbd "M-s") 'save-buffer)
+(define-key paredit-mode-map (kbd "M-s") 'save-buffer)
 
 ;; Kill
 (prelude-require-packages '(whole-line-or-region))
@@ -45,14 +52,18 @@
 (global-set-key (kbd "M-v") 'yank)
 (global-set-key (kbd "M-V") 'yank-pop)
 
+;; Search
+;; (global-set-key (kbd "C-s") 'isearch)
+
 ;; End / Home
 (global-set-key (kbd "<end>") 'end-of-buffer)
 (global-set-key (kbd "<home>") 'beginning-of-buffer)
 
 ;; --------------- ALT key binding
-;; ;; Azerty keyboard
 (global-set-key (kbd "≈") 'counsel-M-x) ; Alt + x
-(global-set-key (kbd "∑") 'helm-ag) ; Alt + shift + s
+(use-package helm-ag
+  :ensure t
+  :bind (("∑" . 'helm-ag)))
 (global-set-key (kbd "}") 'toggle-truncate-lines) ; Alt + z
 (global-set-key (kbd "ﬁ") 'goto-line) ; Alt + g
 ;; (global-set-key (kbd "Í") 'decrement-number-at-point)
@@ -62,7 +73,94 @@
 (global-set-key (kbd "ı") 'mc/mark-next-lines) ; ALT+SHIFT+n
 ;; (global-set-key (kbd "∏") 'mc/mark-previous-lines) ; ALT+SHIFT+p
 
-;; ;; Drag line"
+
+
+
+;; ---------------- Window
+(global-set-key (kbd "M-w") 'wlh/delete-window)
+(use-package magit
+  :ensure t
+  :bind ((:map magit-mode-map
+              ("M-w" . 'wlh/delete-window))))
+;; (define-key magit-mode-map (kbd "M-w") 'wlh/delete-window)
+(global-set-key (kbd "M-W") 'delete-frame)
+(define-key magit-mode-map (kbd "M-W") 'delete-frame)
+
+(global-set-key (kbd "M-à") 'delete-window) ;; M-0
+(define-key diff-mode-map (kbd "M-à") 'delete-window)
+
+(global-set-key (kbd "M-&") 'delete-other-windows) ;; M-1
+(define-key diff-mode-map (kbd "M-&") 'delete-other-windows)
+
+(global-set-key (kbd "M-é") 'hrs/split-window-below-and-switch) ;; M-2
+(define-key diff-mode-map (kbd "M-é") 'hrs/split-window-below-and-switch)
+
+(global-set-key (kbd "M-\"") 'hrs/split-window-right-and-switch) ;; M-3
+(define-key diff-mode-map (kbd "M-\"") 'hrs/split-window-right-and-switch)
+(define-key paredit-mode-map (kbd "M-\"") 'hrs/split-window-right-and-switch)
+
+(global-set-key (kbd "C-M-é") 'evil-window-move-very-bottom)
+(global-set-key (kbd "C-M-\"") 'evil-window-move-far-left)
+
+(global-set-key (kbd "M-X") 'other-frame) ; Same keybinding from osx switch window
+
+;; other Window
+(global-set-key (kbd "M-o") 'other-window)
+(define-key diff-mode-map (kbd "M-o") 'other-window)
+;; (define-key ggtags-navigation-map (kbd "M-o") 'other-window) ; Need to override ggtags map
+(define-key ibuffer-mode-map (kbd "M-o") 'other-window)
+;; (global-set-key [(meta shift o)] 'wlh/previous-window)
+
+
+;; buffer
+(global-set-key (kbd "M-n") 'xah-new-empty-buffer)
+(define-key org-mode-map (kbd "M-n") 'xah-new-empty-buffer)
+;; (define-key slime-repl-mode-map (kbd "M-n") 'xah-new-empty-buffer)
+(define-key diff-mode-map (kbd "M-n") 'xah-new-empty-buffer)
+(define-key ibuffer-mode-map (kbd "M-n") 'xah-new-empty-buffer)
+
+(global-set-key [C-M-tab] 'winner-undo)
+(global-set-key [C-M-S-tab] 'winner-redo)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+
+;; ---------------- Dired
+(define-key dired-mode-map (kbd "C-j") 'dired-find-file)
+;; (define-key php-mode-map [(control x) (control j)] 'dired-jump)
+;; (define-key web-mode-map [(control x) (control j)] 'dired-jump)
+;; (define-key dired-mode-map (kbd "C-x w") 'wdired-change-to-wdired-mode)
+;; (define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
+;; (define-key dired-mode-map (kbd "i") 'dired-subtree-toggle)
+;; (define-key dired-mode-map (kbd "<tab>") 'dired-subtree-toggle)
+;; (define-key dired-mode-map (kbd "C-c C-p") 'dired-subtree-up)
+;; (define-key dired-mode-map (kbd "C-c C-n") 'dired-subtree-down)
+;; (define-key dired-mode-map (kbd "b") 'crux-open-with)
+;; (define-key dired-mode-map (kbd "B") 'wlh/vscode-dired-at-point)
+
+;; Scroll
+(global-set-key (kbd "C-v") 'scroll-up-half)
+(global-set-key (kbd "◊") 'scroll-down-half) ; ALT + v
+
+;; ;; Revert buffer
+(define-key global-map (kbd "C-x C-r") 'wlh/revert-buffer)
+(global-set-key (kbd "C-x C-r") 'wlh/revert-buffer)
+(define-key diff-mode-shared-map (kbd "g") 'wlh/revert-buffer)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;; ;; Drag line
 ;; (global-set-key (kbd "π") 'drag-stuff-up) ; ALT+p
 ;; (define-key org-mode-map (kbd "π") 'org-metaup) ; ALT+p
 ;; (global-set-key (kbd "È") 'drag-stuff-up) ; ALT+k
@@ -141,11 +239,6 @@
 ;; (global-set-key (kbd "M-s") 'save-buffer)
 ;; (define-key paredit-mode-map (kbd "M-s") 'save-buffer)
 
-;; ;; delete-window
-;; (global-set-key (kbd "M-w") 'wlh/delete-window) ;; Delete window or frame
-;; (define-key magit-mode-map (kbd "M-w") 'wlh/delete-window)
-;; (global-set-key (kbd "M-W") 'delete-frame)
-;; (define-key magit-mode-map (kbd "M-W") 'delete-frame)
 
 ;; ;; shell-pop
 ;; (global-set-key (kbd "C-!") 'shell-pop)
@@ -194,11 +287,6 @@
 ;; ;; (global-set-key (kbd "C-x C-n") 'xah-new- empty-buffer)
 ;; ;; (define-key org-mode-map (kbd "C-x C-n") 'xah-new-empty-buffer)
 
-;; (global-set-key (kbd "M-n") 'xah-new-empty-buffer)
-;; (define-key org-mode-map (kbd "M-n") 'xah-new-empty-buffer)
-;; ;; (define-key slime-repl-mode-map (kbd "M-n") 'xah-new-empty-buffer)
-;; (define-key diff-mode-map (kbd "M-n") 'xah-new-empty-buffer)
-;; (define-key ibuffer-mode-map (kbd "M-n") 'xah-new-empty-buffer)
 
 ;; ;; New frame
 ;; (global-set-key (kbd "M-N") 'wlh/create-new-centered-frame)
@@ -223,18 +311,6 @@
 
 ;; (global-set-key (kbd "C-x C-k") 'kill-region)
 
-;; ;; ---------------- Dired
-;; (global-set-key (kbd "C-x RET") 'dired-jump)
-;; (define-key php-mode-map [(control x) (control j)] 'dired-jump)
-;; (define-key web-mode-map [(control x) (control j)] 'dired-jump)
-;; (define-key dired-mode-map (kbd "C-x w") 'wdired-change-to-wdired-mode)
-;; (define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
-;; (define-key dired-mode-map (kbd "i") 'dired-subtree-toggle)
-;; (define-key dired-mode-map (kbd "<tab>") 'dired-subtree-toggle)
-;; (define-key dired-mode-map (kbd "C-c C-p") 'dired-subtree-up)
-;; (define-key dired-mode-map (kbd "C-c C-n") 'dired-subtree-down)
-;; (define-key dired-mode-map (kbd "b") 'crux-open-with)
-;; (define-key dired-mode-map (kbd "B") 'wlh/vscode-dired-at-point)
 
 ;; ;; ---------------- Multi cursor binding
 ;; ;; (global-set-key (kbd "M-L") 'mc/mark-all-words-like-this) ; VS Code key binding
@@ -405,32 +481,6 @@
 ;; ;; ---------------- f keys
 ;; ;; (global-set-key (kbd "<f2>") 'helm-mini)
 
-;; ;; ---------------- Window
-;; ;; Azerty bindings
-;; (global-set-key (kbd "M-à") 'delete-window) ;; M-0
-;; (define-key diff-mode-map (kbd "M-à") 'delete-window)
-
-;; (global-set-key (kbd "M-&") 'delete-other-windows) ;; M-1
-;; (define-key diff-mode-map (kbd "M-&") 'delete-other-windows)
-
-;; (global-set-key (kbd "M-é") 'hrs/split-window-below-and-switch) ;; M-2
-;; (define-key diff-mode-map (kbd "M-é") 'hrs/split-window-below-and-switch)
-
-;; (global-set-key (kbd "M-\"") 'hrs/split-window-right-and-switch) ;; M-3
-;; (define-key diff-mode-map (kbd "M-\"") 'hrs/split-window-right-and-switch)
-;; (define-key paredit-mode-map (kbd "M-\"") 'hrs/split-window-right-and-switch)
-
-;; (global-set-key (kbd "C-M-é") 'evil-window-move-very-bottom)
-;; (global-set-key (kbd "C-M-\"") 'evil-window-move-far-left)
-
-;; (global-set-key (kbd "M-X") 'other-frame) ; Same keybinding from osx switch window
-
-;; ;; other Window
-;; (global-set-key (kbd "M-o") 'other-window)
-;; (define-key diff-mode-map (kbd "M-o") 'other-window)
-;; ;; (define-key ggtags-navigation-map (kbd "M-o") 'other-window) ; Need to override ggtags map
-;; (define-key ibuffer-mode-map (kbd "M-o") 'other-window)
-;; (global-set-key [(meta shift o)] 'wlh/previous-window)
 
 ;; ;; Projectile
 ;; (global-set-key (kbd "M-p") 'projectile-find-file)

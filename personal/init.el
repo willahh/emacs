@@ -2,6 +2,12 @@
 (setq prelude-whitespace nil)
 (setq prelude-clean-whitespace-on-save nil)
 
+(add-to-list 'package-archives
+             '("gnu" . "https://elpa.gnu.org/packages/"))
+
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+
 ;; Use-package
 (prelude-require-packages '(use-package))
 (require 'use-package)
