@@ -75,3 +75,12 @@ then goto-char(position)"
   (revert-buffer t t)
   (goto-char tmp)
   (kill-local-variable 'tmp))
+
+(defun wlh/create-new-centered-frame ()
+  "New centered frame."
+  (interactive)
+  (let ((frame (make-frame)))
+    (select-frame frame)
+    (set-frame-size frame 190 70)
+    (funcall #'switch-to-buffer (xah-new-empty-buffer))    
+    (wlh/frame-position-1 frame)))

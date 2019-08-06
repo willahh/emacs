@@ -80,6 +80,10 @@
 ;; (global-set-key (kbd "Ë") 'increment-number-at-point)
 
 ;; ;; Multi cursor stuf
+;; Muti cursor
+(use-package multiple-cursors
+  :bind (("ı" . mc/mark-next-lines))
+  )
 (global-set-key (kbd "ı") 'mc/mark-next-lines) ; ALT+SHIFT+n
 (global-set-key (kbd "∏") 'mc/mark-previous-lines) ; ALT+SHIFT+p
 
@@ -289,25 +293,14 @@
 ;; (define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill)
 ;; (define-key php-mode-map (kbd "<C-M-mouse-1>") 'dumb-jump-go)
 
-
-;; ;; Buffer / frames / main
-;; ;; Frames
-;; (global-set-key (kbd "C-x C-b") 'ibuffer)
-;; (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-
-;; ;; ---------------- M-n M-N
-;; ;; New buffer
-;; ;; (global-set-key (kbd "C-x C-n") 'xah-new- empty-buffer)
-;; ;; (define-key org-mode-map (kbd "C-x C-n") 'xah-new-empty-buffer)
-
-
-;; ;; New frame
-;; (global-set-key (kbd "M-N") 'wlh/create-new-centered-frame)
+;; New frame
+(require 'slime)
+(global-set-key (kbd "M-N") 'wlh/create-new-centered-frame)
 ;; (define-key highlight-symbol-nav-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
-;; (define-key ibuffer-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
-;; (define-key compilation-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
-;; (define-key magit-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
-;; (define-key slime-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
+(define-key ibuffer-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
+(define-key compilation-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
+(define-key magit-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
+(define-key slime-mode-map (kbd "M-N") 'wlh/create-new-centered-frame)
 
 ;; ;; Highlight-symbol
 ;; ;; (global-set-key (kbd "M-N") 'highlight-symbol-next)
